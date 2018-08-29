@@ -1,0 +1,19 @@
+{
+    "full_name": "Your name",
+    "email": "Your email address",
+    "github_username": "Your github username",
+    "project_name": "Your package name",
+    "project_short_description": "A short description of the project",
+    "minimum_python_version": [
+        "3.6",
+        "3.7"
+    ],
+    "version": "0.1.0",
+    "command_line_interface": "y",
+    "open_source_license": [
+        "MIT",
+        "BSD",
+        "ISC",
+        "Not open source"
+    ]
+}

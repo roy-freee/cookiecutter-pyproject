@@ -1,0 +1,35 @@
+- repo: https://github.com/asottile/seed-isort-config
+  rev: v1.1.0
+  hooks:
+  - id: seed-isort-config
+- repo: https://github.com/pre-commit/mirrors-isort
+  rev: v4.3.4
+  hooks:
+  - id: isort
+- repo: https://github.com/ambv/black
+  rev: stable
+  hooks:
+  - id: black
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v1.4.0
+  hooks:
+  - id: flake8
+- repo: git://github.com/chewse/pre-commit-mirrors-pydocstyle
+  rev: 'master'
+  hooks:
+  - id: pydocstyle
+- repo: local
+  hooks:
+  - id: install-pylint
+    name: install-pylint
+    entry: python -m pip install pylint
+    language: system
+    types: [python]
+    pass_filenames: false
+- repo: local
+  hooks:
+  - id: pylint
+    name: pylint
+    entry: python -m pylint.__main__
+    language: system
+    types: [python]

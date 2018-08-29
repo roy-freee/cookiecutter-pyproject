@@ -1,0 +1,52 @@
+version: 2
+workflows:
+  test:
+    jobs:
+{%- if cookiecutter.minimum_python_version|int >= 3.6 %}
+      - test-3.6
+{%- endif %}
+{%- if cookiecutter.minimum_python_version|int >= 3.7 %}
+      - test-3.7
+{%- endif %}
+jobs:
+  test-common: &test-common
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - c-pip-cache
+      - run:
+          name: Install dependencies
+          command: |
+            python -m venv venv || virtualenv venv
+            . venv/bin/activate
+            pip install --cache-dir ~/pip-cache -e .[dev]
+      - save_cache:
+          paths:
+            - ~/pip-cache
+          key: c-pip-cache
+{%- if cookiecutter.minimum_python_version|int >= 3.6 %}
+  test-3.6:
+    <<: *test-common
+    docker:
+      - image: circleci/python:3.6-stretch
+    steps:
+      - run:
+          name: Run tests
+          command: |
+            . venv/bin/activate
+            tox -e py36
+{%- endif %}
+{%- if cookiecutter.minimum_python_version|int >= 3.7 %}
+  test-3.7:
+    <<: *test-common
+    docker:
+      - image: circleci/python:3.7-stretch
+    steps:
+      - run:
+          name: Run tests
+          command: |
+            . venv/bin/activate
+            tox -e py37
+{%- endif %}
