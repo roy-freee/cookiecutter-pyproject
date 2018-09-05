@@ -8,6 +8,7 @@
         "3.6",
         "3.7"
     ],
+    "support_python2": "n",
     "version": "0.1.0",
     "command_line_interface": "y",
     "open_source_license": [

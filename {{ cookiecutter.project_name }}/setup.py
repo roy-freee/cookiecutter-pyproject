@@ -3,6 +3,8 @@
 
 """The setup script."""
 
+import os
+import re
 from setuptools import find_packages, setup
 
 REQUIREMENTS = []
@@ -12,6 +14,9 @@ DEV_REQUIREMENTS = ["bumpversion", "pre-commit", "tox"]
 
 with open("README.rst") as readme_file:
     README = readme_file.read()
+
+with open(os.path.join("{{ cookiecutter.project_name }}", '__version__.py'), 'rt') as f:
+    VERSION = re.search(r"""__version__\s=\s['"](.+)['"]""", f.read()).group(1)
 
 
 {%- set license_classifiers = {
@@ -29,9 +34,17 @@ setup(
 {%- if cookiecutter.open_source_license in license_classifiers %}
         "{{ license_classifiers[cookiecutter.open_source_license] }}",
 {%- endif %}
+{%- if cookiecutter.support_python2 != "n" %}
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 2.7",
+{%- endif %}
         "Programming Language :: Python :: 3",
+{%- if cookiecutter.minimum_python_version|float <= 3.6 %}
         "Programming Language :: Python :: 3.6",
+{%- endif %}
+{%- if cookiecutter.minimum_python_version|float <= 3.7 %}
         "Programming Language :: Python :: 3.7",
+{%- endif %}
     ],
     description="{{ cookiecutter.project_short_description }}",
     {%- if cookiecutter.command_line_interface|lower == 'y' %}
@@ -45,10 +58,10 @@ setup(
     include_package_data=True,
     keywords="{{ cookiecutter.project_name }}",
     name="{{ cookiecutter.project_name }}",
-    packages=find_packages(include=["{{ cookiecutter.project_name }}"]),
+    packages=find_packages(),
     setup_requires=SETUP_REQUIREMENTS,
     tests_require=TEST_REQUIREMENTS,
     extras_require={"dev": DEV_REQUIREMENTS},
     url="https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_name }}",
-    version="{{ cookiecutter.version }}",
+    version=VERSION,
 )
